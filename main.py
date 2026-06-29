@@ -1,30 +1,68 @@
-# Importación de clases
+# Archivo principal del proyecto
 
 from modelos.producto import Producto
 from modelos.cliente import Cliente
 from servicios.restaurante import Restaurante
 
 
-# Crear restaurante
-restaurante = Restaurante("Restaurante Sabor Andino")
+def main():
 
-# Crear productos
-producto1 = Producto("Hamburguesa", 5.50, "Comida")
-producto2 = Producto("Pizza", 8.00, "Comida")
-producto3 = Producto("Jugo Natural", 2.50, "Bebida")
+    # Crear restaurante
+    restaurante = Restaurante("Restaurante Sabor Andino")
 
-# Crear clientes
-cliente1 = Cliente("Antonio Vasquez", "0102030405")
-cliente2 = Cliente("Maria Lopez", "1102233445")
+    # Crear productos
 
-# Agregar productos al restaurante
-restaurante.agregar_producto(producto1)
-restaurante.agregar_producto(producto2)
-restaurante.agregar_producto(producto3)
+    producto1 = Producto(
+        "Pizza Familiar",
+        "Comida",
+        15.99,
+        12,
+        True
+    )
 
-# Agregar clientes al restaurante
-restaurante.agregar_cliente(cliente1)
-restaurante.agregar_cliente(cliente2)
+    producto2 = Producto(
+        "Jugo Natural",
+        "Bebida",
+        3.50,
+        25,
+        True
+    )
 
-# Mostrar información registrada
-restaurante.mostrar_informacion()
+    # Crear clientes
+
+    cliente1 = Cliente(
+        "Antonio Vasquez",
+        22,
+        "antonio@email.com",
+        True
+    )
+
+    cliente2 = Cliente(
+        "María López",
+        28,
+        "maria@email.com",
+        False
+    )
+
+    # Agregar productos
+
+    restaurante.agregar_producto(producto1)
+    restaurante.agregar_producto(producto2)
+
+    # Agregar clientes
+
+    restaurante.agregar_cliente(cliente1)
+    restaurante.agregar_cliente(cliente2)
+
+    # Mostrar información
+
+    print("=" * 50)
+    print(restaurante.nombre)
+    print("=" * 50)
+
+    restaurante.mostrar_productos()
+    restaurante.mostrar_clientes()
+
+
+if __name__ == "__main__":
+    main()
