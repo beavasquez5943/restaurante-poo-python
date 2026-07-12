@@ -4,65 +4,105 @@ from modelos.producto import Producto
 from modelos.cliente import Cliente
 from servicios.restaurante import Restaurante
 
+restaurante = Restaurante()
 
-def main():
+while True:
 
-    # Crear restaurante
-    restaurante = Restaurante("Restaurante Sabor Andino")
+    print("\n====================================")
+    print("      SISTEMA DE RESTAURANTE")
+    print("====================================")
+    print("1. Registrar producto")
+    print("2. Listar productos")
+    print("3. Buscar producto")
+    print("------------------------------------")
+    print("4. Registrar cliente")
+    print("5. Listar clientes")
+    print("6. Buscar cliente")
+    print("------------------------------------")
+    print("7. Salir")
 
-    # Crear productos
+    opcion = input("\nSeleccione una opción: ")
 
-    producto1 = Producto(
-        "Pizza Familiar",
-        "Comida",
-        15.99,
-        12,
-        True
-    )
+    if opcion == "1":
 
-    producto2 = Producto(
-        "Jugo Natural",
-        "Bebida",
-        3.50,
-        25,
-        True
-    )
+        try:
+            nombre = input("Nombre: ")
+            categoria = input("Categoría: ")
+            precio = float(input("Precio: "))
+            disponible = input("Disponible (s/n): ").lower() == "s"
 
-    # Crear clientes
+            producto = Producto(
+                nombre,
+                categoria,
+                precio,
+                disponible
+            )
 
-    cliente1 = Cliente(
-        "Antonio Vasquez",
-        22,
-        "antonio@email.com",
-        True
-    )
+            restaurante.registrar_producto(producto)
 
-    cliente2 = Cliente(
-        "María López",
-        28,
-        "maria@email.com",
-        False
-    )
+            print("\nProducto registrado correctamente.")
 
-    # Agregar productos
+        except ValueError as e:
+            print(e)
 
-    restaurante.agregar_producto(producto1)
-    restaurante.agregar_producto(producto2)
+    elif opcion == "2":
 
-    # Agregar clientes
+        restaurante.listar_productos()
 
-    restaurante.agregar_cliente(cliente1)
-    restaurante.agregar_cliente(cliente2)
+    elif opcion == "3":
 
-    # Mostrar información
+        nombre = input("Ingrese el nombre del producto: ")
 
-    print("=" * 50)
-    print(restaurante.nombre)
-    print("=" * 50)
+        producto = restaurante.buscar_producto(nombre)
 
-    restaurante.mostrar_productos()
-    restaurante.mostrar_clientes()
+        if producto:
+            print(producto.mostrar_informacion())
+        else:
+            print("Producto no encontrado.")
 
+    elif opcion == "4":
 
-if __name__ == "__main__":
-    main()
+        try:
+            id_cliente = int(input("ID: "))
+            nombre = input("Nombre: ")
+            correo = input("Correo: ")
+
+            cliente = Cliente(
+                id_cliente,
+                nombre,
+                correo
+            )
+
+            restaurante.registrar_cliente(cliente)
+
+            print("Cliente registrado correctamente.")
+
+        except ValueError:
+            print("ID inválido.")
+
+    elif opcion == "5":
+
+        restaurante.listar_clientes()
+
+    elif opcion == "6":
+
+        nombre = input("Nombre del cliente: ")
+
+        cliente = restaurante.buscar_cliente(nombre)
+
+        if cliente:
+            print("----------------------------")
+            print(f"ID: {cliente.id_cliente}")
+            print(f"Nombre: {cliente.nombre}")
+            print(f"Correo: {cliente.correo}")
+        else:
+            print("Cliente no encontrado.")
+
+    elif opcion == "7":
+
+        print("\nGracias por utilizar el sistema.")
+        break
+
+    else:
+
+        print("Opción inválida.")

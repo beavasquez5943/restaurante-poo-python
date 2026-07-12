@@ -1,29 +1,48 @@
 # Sistema de Gestión de Restaurante
 
 ## Estudiante
+
 Bernardo Antonio Vasquez Maza
 
 ## Descripción
 
-Proyecto Tarea de la Semana 4 de Programación Orientada a Objetos.
+Este proyecto consiste en un sistema básico de gestión de restaurante desarrollado en Python utilizando Programación Orientada a Objetos.
 
-El sistema representa de forma básica la gestión de un restaurante utilizando Programación Orientada a Objetos en Python. Permite registrar productos y clientes, almacenarlos en una clase principal llamada Restaurante y mostrar la información registrada.
+El sistema permite registrar productos y clientes mediante clases independientes organizadas en módulos.
 
-## Estructura del proyecto
+## Estructura
 
+```
 restaurante_app/
+│
+├── modelos/
+│   ├── producto.py
+│   └── cliente.py
+│
+├── servicios/
+│   └── restaurante.py
+│
+└── main.py
 
-    modelos/
-        producto.py
-        cliente.py
+## Constructor
 
-    servicios/
-        restaurante.py
-main.py
+La clase Producto utiliza el constructor __init__ para crear objetos a partir de los datos ingresados por el usuario.
 
-## Tecnologías utilizadas
+## @property y @setter
 
-- Python 3
-- Visual Studio Code
-- GitHub
+Se utilizan para controlar el acceso y validar el nombre, la categoría y el precio de los productos.
 
+## @dataclass
+
+La clase Cliente fue desarrollada utilizando @dataclass para simplificar la creación de objetos.
+
+## Menú
+
+El sistema permite:
+
+- Registrar productos
+- Listar productos
+- Buscar productos
+- Registrar clientes
+- Listar clientes
+- Buscar clientes
