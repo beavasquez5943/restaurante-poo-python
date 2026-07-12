@@ -5,24 +5,24 @@ from modelos.cliente import Cliente
 from servicios.restaurante import Restaurante
 
 restaurante = Restaurante()
-
+# Menu principal del sistema
 while True:
 
-    print("\n====================================")
+    print("\n_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_=")
     print("      SISTEMA DE RESTAURANTE")
-    print("====================================")
+    print("_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_=")
     print("1. Registrar producto")
     print("2. Listar productos")
     print("3. Buscar producto")
-    print("------------------------------------")
+    print("_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_=")
     print("4. Registrar cliente")
     print("5. Listar clientes")
     print("6. Buscar cliente")
-    print("------------------------------------")
+    print("_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_=")
     print("7. Salir")
 
     opcion = input("\nSeleccione una opción: ")
-
+# opcion registrar producto
     if opcion == "1":
 
         try:
@@ -44,11 +44,11 @@ while True:
 
         except ValueError as e:
             print(e)
-
+# opcion listar productos
     elif opcion == "2":
 
         restaurante.listar_productos()
-
+# opcion buscar producto
     elif opcion == "3":
 
         nombre = input("Ingrese el nombre del producto: ")
@@ -59,7 +59,7 @@ while True:
             print(producto.mostrar_informacion())
         else:
             print("Producto no encontrado.")
-
+# opcion registrar cliente
     elif opcion == "4":
 
         try:
@@ -79,11 +79,11 @@ while True:
 
         except ValueError:
             print("ID inválido.")
-
+# opcion listar cliente
     elif opcion == "5":
 
         restaurante.listar_clientes()
-
+# opcion buscar cliente
     elif opcion == "6":
 
         nombre = input("Nombre del cliente: ")
@@ -97,7 +97,7 @@ while True:
             print(f"Correo: {cliente.correo}")
         else:
             print("Cliente no encontrado.")
-
+# opcion salir
     elif opcion == "7":
 
         print("\nGracias por utilizar el sistema.")
