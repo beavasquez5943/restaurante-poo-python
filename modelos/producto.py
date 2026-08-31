@@ -1,5 +1,4 @@
 # modelos/producto.py
-
 class Producto:
     """Clase que representa un producto del restaurante."""
 
@@ -9,12 +8,14 @@ class Producto:
         nombre: str,
         categoria: str,
         precio: float,
-        disponible: bool = True
+        disponible: bool = True,
+        stock: int = 0,
     ):
         self.codigo = codigo
         self.nombre = nombre
         self.categoria = categoria
         self.precio = precio
+        self.stock = stock
         self.disponible = disponible
 
     @property
@@ -57,11 +58,36 @@ class Producto:
             raise ValueError("El precio debe ser mayor que cero.")
         self.__precio = valor
 
+    @property
+    def stock(self) -> int:
+        return self.__stock
+
+    @stock.setter
+    def stock(self, valor: int) -> None:
+        if isinstance(valor, bool) or int(valor) != valor:
+            raise ValueError("El stock debe ser un número entero.")
+
+        if valor < 0:
+            raise ValueError("El stock no puede ser negativo.")
+
+        self.__stock = int(valor)
+
+    def vender(self, cantidad: int) -> None:
+        """Disminuye el stock cuando se realiza una venta válida."""
+
+        if cantidad <= 0:
+            raise ValueError("La cantidad debe ser mayor que cero.")
+
+        if cantidad > self.stock:
+            raise ValueError("Stock insuficiente.")
+
+        self.stock -= cantidad
+
+        if self.stock == 0:
+            self.disponible = False
+
     def to_dict(self) -> dict:
-        """
-        Convierte el objeto Producto en un diccionario
-        compatible con formato JSON.
-        """
+        """Convierte el producto a una estructura compatible con JSON."""
 
         return {
             "codigo": self.codigo,
@@ -69,22 +95,20 @@ class Producto:
             "categoria": self.categoria,
             "precio": self.precio,
             "disponible": self.disponible,
-            "tipo": "Producto"
+            "stock": self.stock,
+            "tipo": "Producto",
         }
 
     def mostrar_informacion(self) -> str:
         """Devuelve la información del producto."""
 
-        estado = (
-            "Disponible"
-            if self.disponible
-            else "No disponible"
-        )
+        estado = "Disponible" if self.disponible else "No disponible"
 
         return (
             f"Código: {self.codigo}\n"
             f"Nombre: {self.nombre}\n"
             f"Categoría: {self.categoria}\n"
             f"Precio: ${self.precio:.2f}\n"
+            f"Stock: {self.stock}\n"
             f"Estado: {estado}"
         )

@@ -1,1 +1,21 @@
-[]
+[
+    {
+        "codigo": "2026",
+        "nombre": "Cerveza",
+        "categoria": "Alcoholicas",
+        "precio": 1.5,
+        "disponible": true,
+        "stock": 20,
+        "tipo": "Producto"
+    },
+    {
+        "codigo": "20261",
+        "nombre": "te",
+        "categoria": "te",
+        "precio": 0.5,
+        "disponible": true,
+        "stock": 19,
+        "tamano": "0.5",
+        "tipo": "Bebida"
+    }
+]
