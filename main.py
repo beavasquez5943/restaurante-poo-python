@@ -35,6 +35,10 @@ try:
         archivo_servicio.cargar_ventas()
     )
 
+    # Reconstruir índices después de recuperar
+    # los datos desde JSON.
+    restaurante.reconstruir_indices()
+
     print(
         f"\nSe cargaron "
         f"{len(restaurante.productos)} producto(s), "
@@ -51,6 +55,13 @@ except (
         f"\nError al cargar los datos: {e}"
     )
 
+    # Garantizar índices válidos
+    restaurante.reconstruir_indices()
+
+
+# =====================================================
+# MENÚ PRINCIPAL
+# =====================================================
 
 while True:
 
@@ -59,7 +70,7 @@ while True:
     )
 
     print(
-        "        SISTEMA DE RESTAURANTE"
+        "       SISTEMA DE RESTAURANTE"
     )
 
     print(
@@ -92,15 +103,16 @@ while True:
     print("9. Eliminar producto")
 
     print("10. Registrar venta")
-    print("11. Consultar ventas de un usuario")
+
+    print(
+        "11. Consultar ventas de un usuario"
+    )
 
     print("12. Salir")
-
 
     opcion = input(
         "\nSeleccione una opción: "
     )
-
 
     # =================================================
     # REGISTRAR PRODUCTO
@@ -161,7 +173,6 @@ while True:
             print(
                 f"\nError: {e}"
             )
-
 
     # =================================================
     # REGISTRAR BEBIDA
@@ -228,7 +239,6 @@ while True:
                 f"\nError: {e}"
             )
 
-
     # =================================================
     # REGISTRAR USUARIO
     # =================================================
@@ -276,7 +286,6 @@ while True:
                 f"\nError: {e}"
             )
 
-
     # =================================================
     # LISTAR PRODUCTOS
     # =================================================
@@ -285,7 +294,6 @@ while True:
 
         restaurante.listar_productos()
 
-
     # =================================================
     # LISTAR USUARIOS
     # =================================================
@@ -293,7 +301,6 @@ while True:
     elif opcion == "5":
 
         restaurante.listar_usuarios()
-
 
     # =================================================
     # BUSCAR PRODUCTO
@@ -305,8 +312,10 @@ while True:
             "Código del producto: "
         )
 
-        producto = restaurante.buscar_producto(
-            codigo
+        producto = (
+            restaurante.buscar_producto(
+                codigo
+            )
         )
 
         if producto:
@@ -325,7 +334,6 @@ while True:
                 "\nProducto no encontrado.\n"
             )
 
-
     # =================================================
     # BUSCAR USUARIO
     # =================================================
@@ -336,8 +344,10 @@ while True:
             "Identificación del usuario: "
         )
 
-        usuario = restaurante.buscar_usuario(
-            identificacion
+        usuario = (
+            restaurante.buscar_usuario(
+                identificacion
+            )
         )
 
         if usuario:
@@ -356,7 +366,6 @@ while True:
                 "\nUsuario no encontrado.\n"
             )
 
-
     # =================================================
     # ACTUALIZAR PRODUCTO
     # =================================================
@@ -369,8 +378,10 @@ while True:
                 "Código del producto a actualizar: "
             )
 
-            producto = restaurante.buscar_producto(
-                codigo
+            producto = (
+                restaurante.buscar_producto(
+                    codigo
+                )
             )
 
             if producto is None:
@@ -433,7 +444,6 @@ while True:
                 f"\nError: {e}"
             )
 
-
     # =================================================
     # ELIMINAR PRODUCTO
     # =================================================
@@ -463,7 +473,6 @@ while True:
             print(
                 f"\nError: {e}"
             )
-
 
     # =================================================
     # REGISTRAR VENTA
@@ -512,7 +521,6 @@ while True:
                 f"\nError: {e}"
             )
 
-
     # =================================================
     # CONSULTAR VENTAS POR USUARIO
     # =================================================
@@ -526,7 +534,6 @@ while True:
         restaurante.mostrar_ventas_usuario(
             identificacion
         )
-
 
     # =================================================
     # SALIR
@@ -559,7 +566,6 @@ while True:
         )
 
         break
-
 
     else:
 

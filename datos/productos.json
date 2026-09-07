@@ -17,5 +17,23 @@
         "stock": 19,
         "tamano": "0.5",
         "tipo": "Bebida"
+    },
+    {
+        "codigo": "0102",
+        "nombre": "Salchipapa",
+        "categoria": "Comida rapida",
+        "precio": 1.25,
+        "disponible": true,
+        "stock": 18,
+        "tipo": "Producto"
+    },
+    {
+        "codigo": "0103",
+        "nombre": "Papipollo",
+        "categoria": "comida rapida",
+        "precio": 2.5,
+        "disponible": true,
+        "stock": 17,
+        "tipo": "Producto"
     }
 ]

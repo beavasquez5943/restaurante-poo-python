@@ -3,5 +3,15 @@
         "identificacion": "0107315863",
         "nombre": "Antonio",
         "correo": "antonivz-333@hotmail.com"
+    },
+    {
+        "identificacion": "0102215340",
+        "nombre": "Julio Vasquez",
+        "correo": "jvasquez"
+    },
+    {
+        "identificacion": "0123456789",
+        "nombre": "Gabriela Vasquez",
+        "correo": "gvasquez"
     }
 ]

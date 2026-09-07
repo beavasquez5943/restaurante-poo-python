@@ -14,6 +14,7 @@ class Bebida(Producto):
         disponible: bool = True,
         stock: int = 0,
     ):
+
         super().__init__(
             codigo,
             nombre,
@@ -30,14 +31,20 @@ class Bebida(Producto):
         return self.__tamano
 
     @tamano.setter
-    def tamano(self, valor: str) -> None:
+    def tamano(
+        self,
+        valor: str
+    ) -> None:
+
         if valor.strip() == "":
-            raise ValueError("El tamaño no puede estar vacío.")
+            raise ValueError(
+                "El tamaño no puede estar vacío."
+            )
 
         self.__tamano = valor
 
     def to_dict(self) -> dict:
-        """Convierte la bebida en un diccionario compatible con JSON."""
+        """Convierte la bebida a un diccionario compatible con JSON."""
 
         return {
             "codigo": self.codigo,
@@ -51,7 +58,12 @@ class Bebida(Producto):
         }
 
     def mostrar_informacion(self) -> str:
-        estado = "Disponible" if self.disponible else "No disponible"
+
+        estado = (
+            "Disponible"
+            if self.disponible
+            else "No disponible"
+        )
 
         return (
             f"Código: {self.codigo}\n"

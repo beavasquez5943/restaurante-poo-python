@@ -3,5 +3,15 @@
         "usuario_id": "0107315863",
         "producto_codigo": "20261",
         "cantidad": 1
+    },
+    {
+        "usuario_id": "0107315863",
+        "producto_codigo": "0102",
+        "cantidad": 2
+    },
+    {
+        "usuario_id": "0102215340",
+        "producto_codigo": "0103",
+        "cantidad": 3
     }
 ]

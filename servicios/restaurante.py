@@ -7,9 +7,43 @@ class Restaurante:
     """Administra las colecciones y reglas del restaurante."""
 
     def __init__(self):
+        # Colecciones principales
         self.productos: list[Producto] = []
         self.usuarios: list[Usuario] = []
         self._ventas: list[Venta] = []
+
+        # Índices auxiliares para mejorar el rendimiento
+        self._productos_por_codigo: dict[str, Producto] = {}
+        self._usuarios_por_identificacion: dict[str, Usuario] = {}
+        self._ventas_por_usuario: dict[str, list[Venta]] = {}
+
+    # =====================================================
+    # ÍNDICES
+    # =====================================================
+
+    def reconstruir_indices(self) -> None:
+        """
+        Reconstruye los índices a partir de las colecciones
+        principales después de cargar los datos desde JSON.
+        """
+
+        self._productos_por_codigo = {
+            producto.codigo: producto
+            for producto in self.productos
+        }
+
+        self._usuarios_por_identificacion = {
+            usuario.identificacion: usuario
+            for usuario in self.usuarios
+        }
+
+        self._ventas_por_usuario = {}
+
+        for venta in self._ventas:
+            self._ventas_por_usuario.setdefault(
+                venta.usuario_id,
+                []
+            ).append(venta)
 
     # =====================================================
     # PRODUCTOS
@@ -20,18 +54,18 @@ class Restaurante:
         producto: Producto
     ) -> bool:
 
-        if self.buscar_producto(
-            producto.codigo
-        ) is not None:
-
+        # La búsqueda de duplicados utiliza el índice
+        if producto.codigo in self._productos_por_codigo:
             print(
                 "\nError: Ya existe un producto "
                 "con ese código.\n"
             )
-
             return False
 
         self.productos.append(producto)
+
+        # Mantener sincronizado el índice
+        self._productos_por_codigo[producto.codigo] = producto
 
         print(
             "\nProducto registrado correctamente.\n"
@@ -52,7 +86,6 @@ class Restaurante:
         )
 
         for producto in self.productos:
-
             print(
                 "----------------------------"
             )
@@ -65,12 +98,12 @@ class Restaurante:
         self,
         codigo: str
     ):
-        for producto in self.productos:
+        """
+        Busca directamente un producto mediante
+        el índice por código.
+        """
 
-            if producto.codigo == codigo:
-                return producto
-
-        return None
+        return self._productos_por_codigo.get(codigo)
 
     def actualizar_producto(
         self,
@@ -82,16 +115,15 @@ class Restaurante:
         stock: int
     ) -> bool:
 
-        producto = self.buscar_producto(
+        # Búsqueda optimizada mediante diccionario
+        producto = self._productos_por_codigo.get(
             codigo
         )
 
         if producto is None:
-
             print(
                 "\nProducto no encontrado.\n"
             )
-
             return False
 
         producto.nombre = nombre
@@ -102,6 +134,10 @@ class Restaurante:
         producto.disponible = (
             disponible and stock > 0
         )
+
+        # El código no cambia, pero se mantiene
+        # explícitamente sincronizado.
+        self._productos_por_codigo[codigo] = producto
 
         print(
             "\nProducto actualizado correctamente.\n"
@@ -114,20 +150,24 @@ class Restaurante:
         codigo: str
     ) -> bool:
 
-        producto = self.buscar_producto(
+        # Búsqueda mediante índice
+        producto = self._productos_por_codigo.get(
             codigo
         )
 
         if producto is None:
-
             print(
                 "\nProducto no encontrado.\n"
             )
-
             return False
 
-        self.productos.remove(
-            producto
+        # Eliminar de la colección principal
+        self.productos.remove(producto)
+
+        # Eliminar también del índice
+        self._productos_por_codigo.pop(
+            codigo,
+            None
         )
 
         print(
@@ -145,23 +185,23 @@ class Restaurante:
         usuario: Usuario
     ) -> bool:
 
-        for u in self.usuarios:
+        # Validación mediante índice
+        if (
+            usuario.identificacion
+            in self._usuarios_por_identificacion
+        ):
+            print(
+                "\nError: Ya existe un usuario "
+                "con esa identificación.\n"
+            )
+            return False
 
-            if (
-                u.identificacion
-                == usuario.identificacion
-            ):
+        self.usuarios.append(usuario)
 
-                print(
-                    "\nError: Ya existe un usuario "
-                    "con esa identificación.\n"
-                )
-
-                return False
-
-        self.usuarios.append(
-            usuario
-        )
+        # Mantener actualizado el índice
+        self._usuarios_por_identificacion[
+            usuario.identificacion
+        ] = usuario
 
         print(
             "\nUsuario registrado correctamente.\n"
@@ -172,11 +212,9 @@ class Restaurante:
     def listar_usuarios(self) -> None:
 
         if not self.usuarios:
-
             print(
                 "\nNo existen usuarios registrados.\n"
             )
-
             return
 
         print(
@@ -184,7 +222,6 @@ class Restaurante:
         )
 
         for usuario in self.usuarios:
-
             print(
                 "----------------------------"
             )
@@ -197,17 +234,14 @@ class Restaurante:
         self,
         identificacion: str
     ):
+        """
+        Busca directamente un usuario mediante
+        el índice por identificación.
+        """
 
-        for usuario in self.usuarios:
-
-            if (
-                usuario.identificacion
-                == identificacion
-            ):
-
-                return usuario
-
-        return None
+        return self._usuarios_por_identificacion.get(
+            identificacion
+        )
 
     # =====================================================
     # VENTAS
@@ -220,50 +254,48 @@ class Restaurante:
         cantidad: int
     ) -> bool:
 
-        usuario = self.buscar_usuario(
-            identificacion_usuario
+        # Buscar usuario mediante índice
+        usuario = (
+            self._usuarios_por_identificacion.get(
+                identificacion_usuario
+            )
         )
 
-        producto = self.buscar_producto(
-            codigo_producto
+        # Buscar producto mediante índice
+        producto = (
+            self._productos_por_codigo.get(
+                codigo_producto
+            )
         )
 
         # Validar usuario
         if usuario is None:
-
             print(
                 "\nError: El usuario no existe.\n"
             )
-
             return False
 
         # Validar producto
         if producto is None:
-
             print(
                 "\nError: El producto no existe.\n"
             )
-
             return False
 
         # Validar cantidad
         if cantidad <= 0:
-
             print(
                 "\nError: La cantidad debe "
                 "ser mayor que cero.\n"
             )
-
             return False
 
         # Validar stock
         if producto.stock < cantidad:
-
             print(
                 f"\nError: Stock insuficiente. "
                 f"Stock disponible: {producto.stock}.\n"
             )
-
             return False
 
         try:
@@ -274,13 +306,17 @@ class Restaurante:
                 cantidad
             )
 
-            self._ventas.append(
-                venta
-            )
+            # Agregar a la colección principal
+            self._ventas.append(venta)
 
-            producto.vender(
-                cantidad
-            )
+            # Actualizar índice de ventas por usuario
+            self._ventas_por_usuario.setdefault(
+                usuario.identificacion,
+                []
+            ).append(venta)
+
+            # Actualizar stock
+            producto.vender(cantidad)
 
             print(
                 "\nVenta registrada correctamente.\n"
@@ -311,49 +347,48 @@ class Restaurante:
         identificacion_usuario: str
     ) -> list[Venta]:
 
-        ventas_usuario: list[Venta] = []
+        """
+        Consulta las ventas de un usuario utilizando
+        el índice _ventas_por_usuario, evitando recorrer
+        toda la lista de ventas.
+        """
 
-        for venta in self._ventas:
-
-            if (
-                venta.usuario_id
-                == identificacion_usuario
-            ):
-
-                ventas_usuario.append(
-                    venta
-                )
-
-        return ventas_usuario
+        return self._ventas_por_usuario.get(
+            identificacion_usuario,
+            []
+        ).copy()
 
     def mostrar_ventas_usuario(
         self,
         identificacion_usuario: str
     ) -> None:
 
-        usuario = self.buscar_usuario(
-            identificacion_usuario
+        # Buscar usuario mediante índice
+        usuario = (
+            self._usuarios_por_identificacion.get(
+                identificacion_usuario
+            )
         )
 
         if usuario is None:
-
             print(
                 "\nUsuario no encontrado.\n"
             )
-
             return
 
-        ventas = self.consultar_ventas_usuario(
-            identificacion_usuario
+        # Obtener ventas mediante índice
+        ventas = (
+            self._ventas_por_usuario.get(
+                identificacion_usuario,
+                []
+            )
         )
 
         if not ventas:
-
             print(
                 "\nEl usuario no tiene ventas "
                 "registradas.\n"
             )
-
             return
 
         print(
@@ -363,18 +398,18 @@ class Restaurante:
 
         for venta in ventas:
 
-            producto = self.buscar_producto(
-                venta.producto_codigo
+            # Búsqueda del producto mediante índice
+            producto = (
+                self._productos_por_codigo.get(
+                    venta.producto_codigo
+                )
             )
 
             if producto:
-
                 nombre_producto = (
                     producto.nombre
                 )
-
             else:
-
                 nombre_producto = (
                     "Producto no disponible"
                 )
